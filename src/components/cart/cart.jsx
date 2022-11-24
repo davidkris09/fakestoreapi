@@ -1,23 +1,27 @@
-import React, {useRef} from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Header } from '../homePage/header';
 import { Checkout } from '../cart/checkout';
 import { plusproduct,removeproduct } from '../../features/counter/counterSlice';
-import { Button, Item, Label, Checkbox } from 'semantic-ui-react'
+import { removecart } from '../../features/product/cart';
+import { Button, Item, Label } from 'semantic-ui-react'
 
 const Cart = () => {
   const cart = useSelector(state => state.cart.cart)
+  console.log(cart)
   const dispatch = useDispatch()
-  const ref = useRef(null)
 
-  const handleCheckbox = () => {
-    if(ref.current.checked) {
-      console.log('plus')
+  const handleCheckbox = (e) => {
+    if(e.target.checked){
       dispatch(plusproduct())
     } else{
-      console.log('minus')
       dispatch(removeproduct())
     }
+  }
+
+  const handleRemove = (params) => {
+    console.log(params.select.id)
+    dispatch(removecart(params.select.id))
   }
 
   return (
@@ -25,12 +29,12 @@ const Cart = () => {
         <Header/>
         <div className='containerCart'>
           { 
-            cart.map(product => { 
+            cart.map((product) => { 
               return product.length !== 0 ?
                 <>
                   <Item.Group divided className='itemgroup' key={product.select.id}>
                     <Item className='itemCart'>
-                      <Checkbox ref={ref} onChange={handleCheckbox}/>
+                      <input id={`checkbox${product.select.id}`} type='checkbox' className='checkbox' onChange={(e) => handleCheckbox(e)}/>
                       <Item.Image size='tiny' src={product.select.image} />
 
                       <Item.Content>
@@ -39,7 +43,7 @@ const Cart = () => {
                           <span className='cinema'>$ {product.select.price}</span>
                         </Item.Meta>
                         <Item.Extra>
-                          <Button negative floated='right'>
+                          <Button negative floated='right' onClick={() => handleRemove(product)}>
                             Remove
                           </Button>
                           <Label>{product.count}</Label> quantity

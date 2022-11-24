@@ -3,25 +3,31 @@ import {Header} from './header'
 import {Footer} from './footer'
 import { useDispatch, useSelector } from 'react-redux'
 import { increment,decrement,reset } from '../../features/counter/counterSlice'
-import { faStar } from '@fortawesome/free-solid-svg-icons'
+import { faStar, faStarOfDavid } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
-import { addcart } from '../../features/product/cart'
+import { addcart, addsameproduct } from '../../features/product/cart'
 
 const SingleProduct = () => {
   const dispatch = useDispatch()
   const count = useSelector((state) => state.counter.value)
   const select = useSelector((state) => state.singleProduct.product)
+  const cart = useSelector(state => state.cart.cart)
   const token = localStorage.getItem('token')
 
   const handleCart = (e) => {
     e.preventDefault()
-    dispatch(addcart({select, count}))
+    let exist = cart.find(v => v.select.id === select.id)
+    if(exist && cart.length !== 0){
+      dispatch(addsameproduct({select, count}))
+    } else{
+      dispatch(addcart({select, count}))
+    }
   }
 
   useEffect(() => {
     dispatch(reset())
-  },[dispatch])
+  },[dispatch, select, cart])
 
   return (
     <>
