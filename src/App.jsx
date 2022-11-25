@@ -2,6 +2,7 @@ import './App.css';
 import React, {Component, lazy, Suspense} from 'react';
 import {Routes, Route} from 'react-router-dom'
 import { withCookies } from 'react-cookie';
+import Spinner from 'react-bootstrap/Spinner';
 
 const Home = lazy(() => import('./components/homePage/home'))
 const ForgotPassword = lazy(() => import('./components/authPage/forgotPassword'))
@@ -16,7 +17,7 @@ class App extends Component {
   render() {
     return (
       <div className='App'>
-        <Suspense fallback={<h1>Loading...</h1>}>
+        <Suspense fallback={<Spinner animation="grow" />}>
           <Routes>
             <Route path='/' element={<Home/>}/>
               <Route path='/cart' element={<Cart />}/>
