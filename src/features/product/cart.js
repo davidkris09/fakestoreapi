@@ -18,11 +18,17 @@ export const addCart = createSlice({
                 }
                 return value
             })
-            state.cart = update
+            return {
+                ...state,
+                cart: update
+            }
         },
         removecart: (state,action) => {
-            let id = state.cart.indexOf(action.payload)
-            state.cart.splice(id, 1)
+            let getIndex = current(state.cart).find(v => v.select.id === action.payload)
+            let id = current(state.cart).indexOf(getIndex)
+            if(id > -1) {
+                state.cart.splice(id, 1)
+            }
         }
     }
 })

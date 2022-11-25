@@ -8,7 +8,6 @@ import { Button, Item, Label } from 'semantic-ui-react'
 
 const Cart = () => {
   const cart = useSelector(state => state.cart.cart)
-  console.log(cart)
   const dispatch = useDispatch()
 
   const handleCheckbox = (e) => {
@@ -20,8 +19,8 @@ const Cart = () => {
   }
 
   const handleRemove = (params) => {
-    console.log(params.select.id)
     dispatch(removecart(params.select.id))
+    dispatch(removeproduct())
   }
 
   return (
@@ -29,10 +28,10 @@ const Cart = () => {
         <Header/>
         <div className='containerCart'>
           { 
-            cart.map((product) => { 
+            cart.map((product,index) => { 
               return product.length !== 0 ?
                 <>
-                  <Item.Group divided className='itemgroup' key={product.select.id}>
+                  <Item.Group divided className='itemgroup' key={index}>
                     <Item className='itemCart'>
                       <input id={`checkbox${product.select.id}`} type='checkbox' className='checkbox' onChange={(e) => handleCheckbox(e)}/>
                       <Item.Image size='tiny' src={product.select.image} />
